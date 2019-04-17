@@ -1,12 +1,12 @@
 # Comparing Unigram and Trigram model for sentence generation
 
 ## Installation:
-''' bash
+```bash
 python version 2.0 above
 pip install numpy
 pip install tabulate
 pip install sklearn
-'''
+```
 
 ## Usage:
 ''' python
