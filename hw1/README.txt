@@ -1,14 +1,18 @@
 # Comparing Unigram and Trigram model for sentence generation
 
 ## Installation:
-        python version 2.0 above
-        pip install numpy
-        pip install tabulate
-        pip install sklearn
-        
+'''bash
+ python version 2.0 above
+pip install numpy
+pip install tabulate
+pip install sklearn
+'''
 
 ## Usage:
-        python data.py
+'''python
+python data.py
+'''
+        
 ## File:
 lm.py: This file describes the higher level interface for a language model, and contains functions to train, query, and evaluate it. An implementation of a simple back-off based unigram model is also included, that implements all of the functions
 of the interface.
