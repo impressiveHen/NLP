@@ -94,7 +94,7 @@ class Unigram(LangModel):
 #==============================================================================
 
 class Trigram(LangModel):
-    def __init__(self,threshold=4, alpha=0.1, normMeth="interpol"):
+    def __init__(self,threshold=4, alpha=0.1, normMeth="laplace"):
         assert isinstance(threshold,int)
         assert isinstance(alpha,float)
         assert isinstance(normMeth,str)
@@ -106,7 +106,7 @@ class Trigram(LangModel):
         self.threshold = threshold
         self.alpha = alpha
         self.normMeth = normMeth
-        self.lmd = [0.0, 0.0, 1]
+        self.lmd = [0.01, 0.15, 0.84]
 
     def filter(self,corpus):
         for sentence in corpus:
@@ -192,10 +192,10 @@ class Trigram(LangModel):
         lmd3 = self.lmd[2]
         if tri in self.model:
             prob = prob + lmd1*self.model[tri]
-        if tri[:2] in self.two:
-            prob = prob + lmd2*self.two[tri[:2]]/self.one[tri[0]]
-        if tri[0] in self.one:
-            prob = prob + lmd3*self.one[tri[0]]/v
+        if tri[-2:] in self.two:
+            prob = prob + lmd2*self.two[tri[-2:]]/self.one[tri[-2]]
+        if tri[-1] in self.one:
+            prob = prob + lmd3*self.one[tri[-1]]/v
         if prob==0:
             return log(0.000001,2)
         prob = log(prob,2)
@@ -203,15 +203,27 @@ class Trigram(LangModel):
 
     def findLamdas(self,dev_corpus):
         min_per = float('inf')
+        best_lmd1 = 1.0
+        best_lmd2 = 0.0
+        best_lmd3 = 0.0
         for lmd1 in [i*0.25 for i in range(5)]:
             for lmd2 in [i*0.25 for i in range(0,int((1-lmd1)*4)+1)]:
                 lmd3 = 1 - lmd1 - lmd2
+                self.lmd[0] = float(lmd1)
+                self.lmd[1] = float(lmd2)
+                self.lmd[2] = float(lmd3)
                 temp_per = self.perplexity(dev_corpus)
                 if temp_per < min_per:
                     min_per = temp_per
-                    self.lmd[0] = lmd1
-                    self.lmd[1] = lmd2
-                    self.lmd[2] = lmd3
+                    best_lmd1 = self.lmd[0]
+                    best_lmd2 = self.lmd[1]
+                    best_lmd3 = self.lmd[2]
+        self.lmd[0] = best_lmd1
+        self.lmd[1] = best_lmd2
+        self.lmd[2] = best_lmd3
+        print(self.lmd[0])
+        print(self.lmd[1])
+        print(self.lmd[2])
 
 
 

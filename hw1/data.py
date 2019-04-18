@@ -120,8 +120,8 @@ def learn_unigram(data, verbose=True):
         print("test :", unigram.perplexity(data.test))
         from generator import Sampler
         sampler = Sampler(unigram)
-        print("sample 1: ", " ".join(str(x) for x in sampler.sample_sentence([])))
-        print("sample 2: ", " ".join(str(x) for x in sampler.sample_sentence([])))
+        print("sample 1: ", " ".join(str(x) for x in sampler.sample_sentence(['The'])))
+        print("sample 2: ", " ".join(str(x) for x in sampler.sample_sentence(['They'])))
     return unigram
 
 def learn_trigram(data, verbose=True):
@@ -133,6 +133,8 @@ def learn_trigram(data, verbose=True):
     from lm import Trigram
     trigram = Trigram()
     trigram.fit_corpus(data.train)
+    #if trigram.normMeth == "interpol":
+    #    trigram.findLamdas(data.dev)
     if verbose:
         print("vocab:", len(trigram.vocab()))
         # evaluate on train, test, and dev
@@ -141,8 +143,8 @@ def learn_trigram(data, verbose=True):
         print("test :", trigram.perplexity(data.test))
         from generator import Sampler
         sampler = Sampler(trigram)
-        print("sample 1: ", " ".join(str(x) for x in sampler.sample_sentence([])))
-        print("sample 2: ", " ".join(str(x) for x in sampler.sample_sentence([])))
+        print("sample 1: ", " ".join(str(x) for x in sampler.sample_sentence(['The'])))
+        print("sample 2: ", " ".join(str(x) for x in sampler.sample_sentence(["They"])))
     return trigram
 
 
