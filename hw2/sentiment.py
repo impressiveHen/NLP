@@ -319,32 +319,32 @@ if __name__ == "__main__":
     new_cls = train_classifier1(new_sentiment.trainX, new_sentiment.trainy)
     classify.evaluate(new_sentiment.devX, new_sentiment.devy, new_cls, 'dev')
 
-    trainCoeff = dict(zip(new_sentiment.count_vect.get_feature_names(), new_cls.coef_.flatten().tolist()))
+    # trainCoeff = dict(zip(new_sentiment.count_vect.get_feature_names(), new_cls.coef_.flatten().tolist()))
 
     unlabeled = read_unlabeled(tarfname,new_sentiment)
-    for i,sentence in enumerate(range(5)):
+    for i,sentence in enumerate(range(15)):
         max_sentence, predict = predict_unlabel(unlabeled, new_cls, 500)
         new_cls = add_train(new_sentiment,new_cls, max_sentence, predict)
         unlabeled.X = new_sentiment.count_vect.transform(unlabeled.data)
         classify.evaluate(new_sentiment.devX, new_sentiment.devy, new_cls, 'dev')
         print(i)
 
-    testCoeff = dict(zip(new_sentiment.count_vect.get_feature_names(), new_cls.coef_.flatten().tolist()))
+    # testCoeff = dict(zip(new_sentiment.count_vect.get_feature_names(), new_cls.coef_.flatten().tolist()))
 
-    diffCoeff = dict()
+    # diffCoeff = dict()
+    # change = list()
+    #
+    # for k in testCoeff:
+    #     if k in trainCoeff:
+    #         diffCoeff[k] = abs(testCoeff[k]-trainCoeff[k])
+    #         if(diffCoeff[k]>0.005):
+    #             change.append(k)
+    # print(change)
 
-    for k in testCoeff:
-        if k in trainCoeff:
-            diffCoeff[k] = abs(testCoeff[k]-trainCoeff[k])
-            if(diffCoeff[k]>0.05):
-                print('big')
-                print(k)
-
-
-    # print("\nReading unlabeled data")
-    # unlabeled = read_unlabeled(tarfname, new_sentiment)
-    # print("Writing predictions to a file")
-    # write_pred_kaggle_file(unlabeled, new_cls, "data/sentiment-pred.csv", new_sentiment)
+    print("\nReading unlabeled data")
+    unlabeled = read_unlabeled(tarfname, new_sentiment)
+    print("Writing predictions to a file")
+    write_pred_kaggle_file(unlabeled, new_cls, "data/sentiment-pred.csv", new_sentiment)
 
 
 # if __name__ == "__main__":
